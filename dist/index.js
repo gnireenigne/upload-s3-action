@@ -1059,7 +1059,7 @@ const s3 = new S3({
 
 const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
 
-let paths = [{path: SOURCE_DIR.replace(/\.(.*)$/, `@${version}.$1`), stats: {}}];
+let paths = [{path: SOURCE_DIR, stats: {}}];
 
 
 function upload(params) {
@@ -1078,7 +1078,7 @@ function run() {
   return Promise.all(
     paths.map(p => {
       const fileStream = fs.createReadStream(p.path);
-      const bucketPath =  p.path;
+      const bucketPath =  p.path.replace(/\.(.*)$/, `@${version}.$1`);
       const params = {
         Bucket: BUCKET,
         ACL: 'public-read',
