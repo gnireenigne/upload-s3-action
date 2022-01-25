@@ -1035,9 +1035,22 @@ const BUCKET = core.getInput('aws_bucket', {
 const SOURCE_DIR = core.getInput('source_dir', {
   required: true
 });
+const PACKAGE = core.getInput('package_file', {
+  required: true
+});
+
 const DESTINATION_DIR = core.getInput('destination_dir', {
   required: false
 });
+
+let version='';
+try {
+  const config = JSON.parse(fs.readFileSync(path.join(process.cwd(), PACKAGE)));
+  version = config.version;
+} catch (error) {
+  console.log(error);
+}
+
 
 const s3 = new S3({
   accessKeyId: AWS_KEY_ID,
@@ -1046,7 +1059,7 @@ const s3 = new S3({
 
 const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
 
-let paths = [{path: SOURCE_DIR , stats: {}}];
+let paths = [{path: SOURCE_DIR.replace(/\.(.*)$/, `@${version}.$1`), stats: {}}];
 
 
 function upload(params) {
