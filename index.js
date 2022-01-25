@@ -3,7 +3,6 @@ const S3 = require('aws-sdk/clients/s3');
 const fs = require('fs');
 const path = require('path');
 const shortid = require('shortid');
-const klawSync = require('klaw-sync');
 const { lookup } = require('mime-types');
 
 const AWS_KEY_ID = core.getInput('aws_key_id', {
@@ -26,17 +25,11 @@ const s3 = new S3({
   accessKeyId: AWS_KEY_ID,
   secretAccessKey: SECRET_ACCESS_KEY
 });
+
 const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
-let paths;
 
+let paths = [{path: SOURCE_DIR , stats: {}}];
 
-if(fs.lstatSync(SOURCE_DIR).isFile() ) {
-  paths = [{path: SOURCE_DIR , stats: {}}];
-} else {
-  paths = klawSync(SOURCE_DIR, {
-    nodir: true
-  });
-}
 
 function upload(params) {
   return new Promise(resolve => {
