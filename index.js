@@ -26,7 +26,6 @@ const s3 = new S3({
   secretAccessKey: SECRET_ACCESS_KEY
 });
 
-const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
 
 let paths = [{path: SOURCE_DIR , stats: {}}];
 
@@ -47,7 +46,7 @@ function run() {
   return Promise.all(
     paths.map(p => {
       const fileStream = fs.createReadStream(p.path);
-      const bucketPath = path.join(destinationDir, path.relative(sourceDir, p.path));
+      const bucketPath = path.join('/', p.path);
       const params = {
         Bucket: BUCKET,
         ACL: 'public-read',
