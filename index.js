@@ -27,12 +27,15 @@ const s3 = new S3({
   secretAccessKey: SECRET_ACCESS_KEY
 });
 const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
-let paths = klawSync(SOURCE_DIR, {
-  nodir: true
-});
+let paths;
+
 
 if(fs.lstatSync(SOURCE_DIR).isFile() ) {
   paths = [{path: SOURCE_DIR , stats: {}}];
+} else {
+  paths = klawSync(SOURCE_DIR, {
+    nodir: true
+  });
 }
 
 function upload(params) {
