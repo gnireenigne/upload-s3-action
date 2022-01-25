@@ -1044,6 +1044,7 @@ const s3 = new S3({
   secretAccessKey: SECRET_ACCESS_KEY
 });
 
+const destinationDir = DESTINATION_DIR === '/' ? shortid() : DESTINATION_DIR;
 
 let paths = [{path: SOURCE_DIR , stats: {}}];
 
