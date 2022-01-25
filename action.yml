@@ -5,6 +5,9 @@ branding:
   icon: 'upload-cloud'
   color: 'orange'
 inputs:
+  package_file:
+    description: 'package file'
+    required: false
   aws_key_id:
     description: 'aws key id'
     required: true
